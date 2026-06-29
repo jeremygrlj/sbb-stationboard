@@ -1,0 +1,49 @@
+{% assign station = trmnl.plugin_settings.custom_fields_values.station_name | default: "Zürich, Im Hagacker" %}
+{% assign station_id = trmnl.plugin_settings.custom_fields_values.station_id | default: "8591209" %}
+{% assign walkingTime = trmnl.plugin_settings.custom_fields_values.walking_time | default: 0 %}
+{% assign abbr_string = trmnl.plugin_settings.custom_fields_values.target_abbreviations | default: 0 %}
+{% assign hidewords = trmnl.plugin_settings.custom_fields_values.target_hidewords | default: 0 %}
+{% assign linetarget_filter = trmnl.plugin_settings.custom_fields_values.linetarget_filter | default: 0 %}
+{% assign minDepartureOffset = trmnl.plugin_settings.custom_fields_values.min_departure_offset | default: 0 %}
+{% assign transportHideGroups = trmnl.plugin_settings.custom_fields_values.transport_hidegroups | default: 0 %}
+{% assign cablewayIcon = trmnl.plugin_settings.custom_fields_values.cableway_icon | default: "Gondel" %}
+
+<div class="layout layout--col gap--xsmall">
+  <table class="table table--small" data-table-limit="true" data-table-max-height="auto">
+    <thead>
+      <tr>
+        <th class="w--14"><span class="label label--xsmall label--gray">Linie</span></th>
+        <th><span class="label label--xsmall label--gray">Ziel</span></th>
+        <th class="w--24 text--right"><span class="label label--xsmall label--gray">Ab</span></th>
+        <th class="w--16 text--center"><span class="label label--xsmall label--gray">+/-</span></th>
+        <th class="w--24 text--right"><span class="label label--xsmall label--gray">Los</span></th>
+      </tr>
+    </thead>
+    <tbody id="departures-body">
+      <tr>
+        <td colspan="5"><span class="label label--base">Lade Daten...</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="title_bar">
+  <img class="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAAAAABXZoBIAAAAAXNSR0IArs4c6QAAAGBJREFUKJHd0EEOwCAIBMDd7f8/3MTQAwVRa3qXi8gYRIFjgu9qAGgA2JRVFfP0Mt8mFvOSdWzVPLXAW4N1ZV7wMSu3BlBb+m9bHjInqqNHxCFh1WwgLNq/S5h1+Mpj4gGrAxoVOFGx+gAAAABJRU5ErkJggg==" />
+  <span class="title">Live-Fahrplan</span>
+  <span class="instance">{{ station }}</span>
+  <span class="instance">{{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%H:%M" }}</span>
+</div>
+
+<script>
+  document.body.setAttribute('data-station', '{{ station }}');
+  document.body.setAttribute('data-station_id', '{{ station_id }}');
+  document.body.setAttribute('data-walkingtime', '{{ walkingTime }}');
+  document.body.setAttribute('data-abbrs', `{{ abbr_string }}`);
+  document.body.setAttribute('data-hidewords', `{{ hidewords }}`);
+  document.body.setAttribute('data-linetargetfilter', `{{ linetarget_filter }}`);
+  document.body.setAttribute('data-mindepartureoffset', '{{ minDepartureOffset }}');
+  document.body.setAttribute('data-hidegroups', `{{ transportHideGroups }}`);
+  document.body.setAttribute('data-cablewayicon', `{{ cablewayIcon }}`);
+  window.stationboardData = { stationboard: {{ stationboard | json }} };
+  renderDepartures(4, 'compact');
+</script>

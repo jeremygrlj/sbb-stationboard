@@ -1,19 +1,21 @@
 ---
-strategy: polling
+strategy: webhook
 no_screen_padding: 'no'
 dark_mode: 'no'
 static_data: ''
 polling_verb: get
-polling_url: https://transport.opendata.ch/v1/stationboard?id={{station_id}}&limit=30&fields[]=stationboard/category&fields[]=stationboard/number&fields[]=stationboard/to&fields[]=stationboard/stop/departure&fields[]=stationboard/stop/prognosis/departure
+framework_version: latest
+serverless_language: ''
+polling_url: ''
 polling_headers: ''
 polling_body: ''
-id: 166116
+id: 214133
 custom_fields:
 - keyname: doesnt_matter
   name: About This Plugin
   field_type: author_bio
-  description: SBB Swiss Stationboard Live was created by David M., a public transport enthusiast and updated by Jens-Christian Fischer to work with polling GET Urls (to make the Stationboard update)
-  github_url: https://github.com/jcfischer/sbb-stationboard
+  description: SBB Swiss Stationboard Live was created by David M., a public transport enthusiast, updated by Jens-Christian Fischer, and further modified by Jeremy Grlj for TRMNL webhook data and current framework layouts.
+  github_url: https://github.com/jeremygrlj/sbb-stationboard
 - keyname: station_name
   field_type: string
   name: Name der Haltestelle

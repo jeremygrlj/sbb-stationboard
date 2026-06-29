@@ -1,0 +1,23 @@
+name: Deploy TRMNL Plugin
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint plugin
+        run: docker run --rm --pull=always -v "${{ github.workspace }}:/plugin" trmnl/trmnlp lint
+
+      - name: Push plugin to TRMNL
+        env:
+          TRMNL_API_KEY: ${{ secrets.TRMNL_API_KEY }}
+        run: docker run --rm --pull=always -e TRMNL_API_KEY -v "${{ github.workspace }}:/plugin" trmnl/trmnlp push --force --id 214133
