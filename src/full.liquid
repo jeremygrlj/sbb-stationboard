@@ -8,7 +8,7 @@
 {% assign transportHideGroups = trmnl.plugin_settings.custom_fields_values.transport_hidegroups | default: 0 %}
 {% assign cablewayIcon = trmnl.plugin_settings.custom_fields_values.cableway_icon | default: "Gondel" %}
 
-<div class="layout layout--col gap--small">
+<div class="layout layout--col layout--start gap--small">
   <table class="table table--base" data-table-limit="true" data-table-max-height="auto">
     <thead>
       <tr>
@@ -45,5 +45,5 @@
   document.body.setAttribute('data-hidegroups', `{{ transportHideGroups }}`);
   document.body.setAttribute('data-cablewayicon', `{{ cablewayIcon }}`);
   window.stationboardData = { stationboard: {{ stationboard | json }} };
-  renderDepartures(9, 'base');
+  renderDepartures(8, 'hero');
 </script>

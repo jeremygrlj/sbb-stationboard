@@ -5,12 +5,14 @@ set -euo pipefail
 
 STATION_ID="${STATION_ID:-8503000}"
 LIMIT="${LIMIT:-12}"
+FETCH_LIMIT="${FETCH_LIMIT:-30}"
+MIN_DEPARTURE_OFFSET="${MIN_DEPARTURE_OFFSET:-10}"
 MAX_PAYLOAD_BYTES="${MAX_PAYLOAD_BYTES:-2048}"
 
 api_response="$(
   curl -fsS -G "https://transport.opendata.ch/v1/stationboard" \
     --data-urlencode "id=${STATION_ID}" \
-    --data-urlencode "limit=${LIMIT}" \
+    --data-urlencode "limit=${FETCH_LIMIT}" \
     --data-urlencode "fields[]=stationboard/category" \
     --data-urlencode "fields[]=stationboard/number" \
     --data-urlencode "fields[]=stationboard/to" \
@@ -18,7 +20,24 @@ api_response="$(
     --data-urlencode "fields[]=stationboard/stop/prognosis/departure"
 )"
 
-payload="{\"merge_variables\":${api_response}}"
+filtered_response="$(
+  printf '%s' "${api_response}" | ruby -rjson -rtime -e '
+    data = JSON.parse(STDIN.read)
+    min_departure = Time.now + Integer(ENV.fetch("MIN_DEPARTURE_OFFSET", "10")) * 60
+    limit = Integer(ENV.fetch("LIMIT", "12"))
+
+    rows = Array(data["stationboard"]).select do |row|
+      raw = row.dig("stop", "departure")
+      raw && Time.parse(raw) >= min_departure
+    rescue ArgumentError
+      false
+    end.first(limit)
+
+    puts JSON.generate("stationboard" => rows)
+  '
+)"
+
+payload="{\"merge_variables\":${filtered_response}}"
 payload_bytes="$(printf '%s' "${payload}" | wc -c | tr -d ' ')"
 if [ "${payload_bytes}" -gt "${MAX_PAYLOAD_BYTES}" ]; then
   printf 'Payload is %s bytes, which exceeds the %s byte limit. Lower LIMIT or reduce fields.\n' "${payload_bytes}" "${MAX_PAYLOAD_BYTES}" >&2

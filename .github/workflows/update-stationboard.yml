@@ -17,5 +17,7 @@ jobs:
         env:
           TRMNL_WEBHOOK_URL: ${{ secrets.TRMNL_WEBHOOK_URL }}
           STATION_ID: ${{ vars.STATION_ID }}
+          MIN_DEPARTURE_OFFSET: ${{ vars.MIN_DEPARTURE_OFFSET }}
+          FETCH_LIMIT: "30"
           LIMIT: "12"
         run: ./scripts/push_stationboard.sh
