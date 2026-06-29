@@ -260,7 +260,7 @@
 
       const startOffset = Math.max(0, (walkingTime || 0) - delayMinutes);
       const losUm = new Date(departureTime.getTime() - startOffset * 60000);
-      const delayAlign = sizeKey === 'hero' ? 'text--left pl--3' : 'text--center';
+      const delayAlign = sizeKey === 'hero' ? 'text--left pl--4' : 'text--center';
       const delayCell = showDelay ? `<td class="${delayAlign}">${delayHtml}</td>` : '';
       const leaveByCell = showLeaveBy ? `<td class="text--right"><span class="${classes.time}">${losUm.toLocaleTimeString('de-CH', timeOptions)}</span></td>` : '';
 
