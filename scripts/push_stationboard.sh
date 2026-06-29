@@ -5,6 +5,7 @@ set -euo pipefail
 
 STATION_ID="${STATION_ID:-8503000}"
 LIMIT="${LIMIT:-12}"
+MAX_PAYLOAD_BYTES="${MAX_PAYLOAD_BYTES:-2048}"
 
 api_response="$(
   curl -fsS -G "https://transport.opendata.ch/v1/stationboard" \
@@ -17,8 +18,15 @@ api_response="$(
     --data-urlencode "fields[]=stationboard/stop/prognosis/departure"
 )"
 
+payload="{\"merge_variables\":${api_response}}"
+payload_bytes="$(printf '%s' "${payload}" | wc -c | tr -d ' ')"
+if [ "${payload_bytes}" -gt "${MAX_PAYLOAD_BYTES}" ]; then
+  printf 'Payload is %s bytes, which exceeds the %s byte limit. Lower LIMIT or reduce fields.\n' "${payload_bytes}" "${MAX_PAYLOAD_BYTES}" >&2
+  exit 1
+fi
+
 curl -fsS -X POST "${TRMNL_WEBHOOK_URL}" \
   -H "Content-Type: application/json" \
-  -d "{\"merge_variables\":${api_response}}"
+  -d "${payload}"
 
-printf '\nStationboard data pushed for station %s.\n' "${STATION_ID}"
+printf '\nStationboard data pushed for station %s (%s bytes).\n' "${STATION_ID}" "${payload_bytes}"

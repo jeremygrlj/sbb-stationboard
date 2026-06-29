@@ -1,0 +1,21 @@
+name: Update Stationboard Data
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Push stationboard webhook data
+        env:
+          TRMNL_WEBHOOK_URL: ${{ secrets.TRMNL_WEBHOOK_URL }}
+          STATION_ID: ${{ vars.STATION_ID }}
+          LIMIT: "12"
+        run: ./scripts/push_stationboard.sh
