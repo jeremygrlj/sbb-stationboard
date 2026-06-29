@@ -153,9 +153,9 @@
     if (size === 'compact') {
       return {
         title: 'label label--small label--gray',
-        line: 'label label--inverted label--small',
+        line: 'label label--inverted label--base',
         target: 'label label--base',
-        time: 'value value--tnums value--xxsmall',
+        time: 'label label--base',
         delay: 'label label--inverted label--base'
       };
     }
@@ -164,8 +164,8 @@
         title: 'label label--xsmall label--gray',
         line: 'label label--small text--bold',
         target: 'label label--small',
-        time: 'value value--tnums value--xxsmall',
-        delay: 'label label--inverted label--xsmall'
+        time: 'label label--small',
+        delay: 'label label--inverted label--small'
       };
     }
     if (size === 'narrow') {
@@ -173,15 +173,15 @@
         title: 'label label--xsmall label--gray',
         line: 'label label--base text--bold',
         target: 'label label--base',
-        time: 'value value--tnums value--xxsmall',
-        delay: 'label label--inverted label--xsmall'
+        time: 'label label--base',
+        delay: 'label label--inverted label--base'
       };
     }
     return {
       title: 'label label--base label--gray',
-      line: 'label label--inverted label--base',
+      line: 'label label--inverted label--large',
       target: 'label label--large',
-      time: 'value value--tnums value--xsmall',
+      time: 'label label--large',
       delay: 'label label--inverted label--large'
     };
   }
