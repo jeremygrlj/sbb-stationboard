@@ -147,7 +147,7 @@
         line: 'label label--inverted label--xlarge',
         target: 'title title--base',
         time: 'value value--tnums value--small',
-        delay: 'label label--inverted label--large'
+        delay: 'label label--inverted label--xlarge'
       };
     }
     if (size === 'compact') {
@@ -260,7 +260,8 @@
 
       const startOffset = Math.max(0, (walkingTime || 0) - delayMinutes);
       const losUm = new Date(departureTime.getTime() - startOffset * 60000);
-      const delayCell = showDelay ? `<td class="text--center">${delayHtml}</td>` : '';
+      const delayAlign = sizeKey === 'hero' ? 'text--left pl--3' : 'text--center';
+      const delayCell = showDelay ? `<td class="${delayAlign}">${delayHtml}</td>` : '';
       const leaveByCell = showLeaveBy ? `<td class="text--right"><span class="${classes.time}">${losUm.toLocaleTimeString('de-CH', timeOptions)}</span></td>` : '';
 
       rowsHtml += `
